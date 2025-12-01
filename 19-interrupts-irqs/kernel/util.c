@@ -1,4 +1,5 @@
 #include "util.h"
+#include "../drivers/ports.h"
 
 void memory_copy(char *source, char *dest, int nbytes) {
     int i;
@@ -27,4 +28,12 @@ void int_to_ascii(int n, char str[]) {
     str[i] = '\0';
 
     /* TODO: implement "reverse" */
+}
+
+void init_timer(unsigned int frequency) {
+    unsigned int divisor = 1193180 / frequency;  // PIT base freq
+
+    port_byte_out(0x43, 0x36);              // comando al PIT
+    port_byte_out(0x40, divisor & 0xFF);    // byte bajo
+    port_byte_out(0x40, (divisor >> 8) & 0xFF); // byte alto
 }
